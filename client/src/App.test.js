@@ -19,14 +19,23 @@ describe("App", () => {
       todos.forEach((todo) => {
         // TODO: assert that each of the todos is rendered
         // Use getByRole() https://testing-library.com/docs/queries/byrole/
-        expect().toBeInTheDocument();
+        expect(
+          screen.getByRole("cell", { name: todo.description })
+        ).toBeInTheDocument();
       });
     });
   });
 
   test("A todo is deleted", async () => {
     // TODO: Start by "waiting" for the todos to be rendered (See the "All todos are rendered" test)
-    await waitFor(() => {});
+    await waitFor(() => {
+      todos.forEach((todo) => {
+        expect(
+          screen.getByRole("cell", { name: todo.description })
+        ).toBeInTheDocument();
+      });
+      
+    });
 
     const firstTodoRow = screen.getByText(todos[0].description).closest("tr");
     const deleteButton = within(firstTodoRow).getByRole("button", {
@@ -35,10 +44,10 @@ describe("App", () => {
 
     // TODO:  Simulate a click on the DELETE button
     // See https://testing-library.com/docs/ecosystem-user-event/
-
+    userEvent.click(deleteButton)
     await waitFor(() => {
       // TODO: assert that the deleted todo is not in the document
-      expect().not.toBeInTheDocument();
+      expect(deleteButton).not.toBeInTheDocument();
     });
   });
 });
